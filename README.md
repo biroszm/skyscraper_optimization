@@ -51,7 +51,7 @@ The environment is created programmatically, with surrounding buildings defined 
 - `depth`,
 - `height`.
 
-The parcel polygon and the neighboring building blocks define the feasible design context. fileciteturn2file1L1-L33 The tower itself is modeled as a rotated rectangle footprint plus a height parameter. fileciteturn2file3L1-L25
+The parcel polygon and the neighboring building blocks define the feasible design context. fileciteturn2file1L1-L33 The tower itself is modeled as a rotated rectangle footprint plus a height parameter. 
 
 ---
 
@@ -81,7 +81,7 @@ A candidate solution is defined by three main variables:
 - `cy`: y-coordinate of tower center,
 - `angle_deg`: tower rotation angle.
 
-The tower is considered feasible only if **all footprint corners remain inside the parcel**. The project implements point-in-polygon and point-on-segment checks to enforce this geometric feasibility constraint during search. fileciteturn2file0L8-L39 fileciteturn2file0L42-L58
+The tower is considered feasible only if **all footprint corners remain inside the parcel**. The project implements point-in-polygon and point-on-segment checks to enforce this geometric feasibility constraint during search.
 
 This is important because the optimization is not allowed to propose visually good but physically invalid placements.
 
@@ -96,9 +96,9 @@ The project evaluates view quality by discretizing the vertical side faces of th
 - the nearest intersection with surrounding buildings is found,
 - the distance to the first obstruction is translated into a score.
 
-If no surrounding building is hit, the window receives a bonus score. If a building is hit, the score increases with distance and saturates according to an exponential function. This scoring behavior is implemented explicitly in the window scoring and tower fitness functions. fileciteturn2file4L1-L54 fileciteturn2file4L55-L116 fileciteturn2file16L1-L47
+If no surrounding building is hit, the window receives a bonus score. If a building is hit, the score increases with distance and saturates according to an exponential function. This scoring behavior is implemented explicitly in the window scoring and tower fitness functions. 
 
-At the tower level, the final **fitness** is the average score across all windows. fileciteturn2file16L38-L47
+At the tower level, the final **fitness** is the average score across all windows. 
 
 This gives the project a clear and interpretable optimization target: **maximize the average view quality of all windows on the tower façade**.
 
@@ -109,15 +109,15 @@ This gives the project a clear and interpretable optimization target: **maximize
 The project compares three search strategies on the same fitness function.
 
 ### 1. Genetic Algorithm
-The GA creates an initial population of feasible tower placements, evaluates them, selects the best individuals, and generates new candidates through angle and position mutations. The implementation keeps the search inside the parcel and tracks both best and mean population fitness over generations. fileciteturn2file10L1-L69 fileciteturn2file10L70-L173 fileciteturn2file10L240-L337
+The GA creates an initial population of feasible tower placements, evaluates them, selects the best individuals, and generates new candidates through angle and position mutations. The implementation keeps the search inside the parcel and tracks both best and mean population fitness over generations. 
 
 ### 2. Simulated Annealing
-Simulated annealing begins from one feasible candidate and proposes local neighbors by perturbing position and rotation. Worse solutions may be accepted with a temperature-controlled probability, which helps the search escape local optima. fileciteturn2file0L91-L134 fileciteturn2file0L144-L268
+Simulated annealing begins from one feasible candidate and proposes local neighbors by perturbing position and rotation. Worse solutions may be accepted with a temperature-controlled probability, which helps the search escape local optima. 
 
 ### 3. Bayesian Optimization
-Bayesian optimization represents candidates in a continuous search space using `cx`, `cy`, and a sine-cosine encoding of rotation angle. It fits a Gaussian Process surrogate and chooses new candidates by maximizing Expected Improvement over a feasible candidate pool. fileciteturn2file6L68-L118 fileciteturn2file6L134-L271
+Bayesian optimization represents candidates in a continuous search space using `cx`, `cy`, and a sine-cosine encoding of rotation angle. It fits a Gaussian Process surrogate and chooses new candidates by maximizing Expected Improvement over a feasible candidate pool. 
 
-The project also includes parameter sweep scripts for all three methods, which helps move beyond a single run and toward a more systematic comparison. fileciteturn2file5L1-L40 fileciteturn2file9L1-L37 fileciteturn2file15L1-L40
+The project also includes parameter sweep scripts for all three methods, which helps move beyond a single run and toward a more systematic comparison. 
 
 ---
 
@@ -151,7 +151,7 @@ This figure is useful because it does not only show the final score. It also sho
 - **Bayesian Optimization** improves more steadily and reaches a competitive solution with a smaller number of high-value updates.
 - **Simulated Annealing** explores more irregularly, reflecting its stochastic acceptance of worse intermediate states.
 
-The codebase supports tracking best and mean fitness histories for GA and BO, and best/current fitness for SA, making this kind of side-by-side comparison possible. fileciteturn2file0L170-L268 fileciteturn2file6L169-L271 fileciteturn2file10L264-L337
+The codebase supports tracking best and mean fitness histories for GA and BO, and best/current fitness for SA, making this kind of side-by-side comparison possible. 
 
 ---
 
@@ -160,19 +160,19 @@ The codebase supports tracking best and mean fitness histories for GA and BO, an
 The problem was solved in five main stages.
 
 ### 1. Build the site geometry
-A parcel polygon and a set of surrounding buildings were defined as a simplified urban environment. fileciteturn2file1L8-L24
+A parcel polygon and a set of surrounding buildings were defined as a simplified urban environment. 
 
 ### 2. Define a feasible tower representation
-The tower footprint was parameterized by center coordinates and rotation angle, then checked against parcel boundaries. fileciteturn2file3L4-L25 fileciteturn2file0L42-L58
+The tower footprint was parameterized by center coordinates and rotation angle, then checked against parcel boundaries. 
 
 ### 3. Compute window-level visibility
-The tower surface was discretized into windows, and each window cast a ray outward to detect the nearest blocking building. fileciteturn2file4L1-L54 fileciteturn2file4L55-L116
+The tower surface was discretized into windows, and each window cast a ray outward to detect the nearest blocking building. 
 
 ### 4. Aggregate local scores into a global objective
-Window scores were converted into an average tower fitness value using a bounded distance-based formula. fileciteturn2file16L1-L47
+Window scores were converted into an average tower fitness value using a bounded distance-based formula. 
 
 ### 5. Optimize the design variables
-Multiple search algorithms were applied to the same objective so that their solution quality and convergence behavior could be compared. fileciteturn2file11L1-L45 fileciteturn2file12L1-L30 fileciteturn2file13L1-L49
+Multiple search algorithms were applied to the same objective so that their solution quality and convergence behavior could be compared. 
 
 ---
 
@@ -184,7 +184,7 @@ From the code and visual outputs, the main takeaways are:
 - A feasible tower placement problem can be handled with explicit geometric constraints rather than post-hoc filtering.
 - Window-level ray scoring provides a natural bridge between spatial obstruction and optimization.
 - Different search methods behave differently even on the same objective function: GA appears strongest in best-achieved score in the provided convergence comparison, while BO is competitive and more sample-efficient in spirit, and SA provides a simpler local-search baseline.
-- Coarse window discretization can be used during search for speed, followed by finer re-evaluation for more precise final scoring. This coarse-to-fine strategy is explicitly implemented in the main optimization scripts. fileciteturn2file11L10-L33 fileciteturn2file13L10-L35 fileciteturn2file5L22-L40
+- Coarse window discretization can be used during search for speed, followed by finer re-evaluation for more precise final scoring. This coarse-to-fine strategy is explicitly implemented in the main optimization scripts. 
 
 ---
 
@@ -257,4 +257,4 @@ This repository includes components for:
 - parameter sweeps and tuning scripts,
 - 2D/3D visualization.
 
-The three main entry scripts demonstrate how the optimization methods are run in practice for the same site context. fileciteturn2file11L1-L45 fileciteturn2file12L1-L30 fileciteturn2file13L1-L49
+The three main entry scripts demonstrate how the optimization methods are run in practice for the same site context. 
