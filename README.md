@@ -51,7 +51,7 @@ The environment is created programmatically, with surrounding buildings defined 
 - `depth`,
 - `height`.
 
-The parcel polygon and the neighboring building blocks define the feasible design context. fileciteturn2file1L1-L33 The tower itself is modeled as a rotated rectangle footprint plus a height parameter. 
+The parcel polygon and the neighboring building blocks define the feasible design context. The tower itself is modeled as a rotated rectangle footprint plus a height parameter. 
 
 ---
 
